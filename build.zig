@@ -3,7 +3,7 @@ const raySdk = @import("raylib/src/build.zig");
 
 // setTarget() must have been called on step before calling this
 fn addRaylibDependencies(step: *std.build.LibExeObjStep, raylib: *std.build.LibExeObjStep) void {
-    step.addIncludePath(std.Build.LazyPath{ .path = "raylib/zig-out/include" });
+    step.addIncludePath(std.Build.LazyPath{ .path = "raylib/src/" });
 
     // raylib's build.zig file specifies all libraries this executable must be
     // linked with, so let's copy them from there.
@@ -13,9 +13,9 @@ fn addRaylibDependencies(step: *std.build.LibExeObjStep, raylib: *std.build.LibE
         }
     }
     if (step.target.isWindows()) {
-        step.addObjectFile(std.Build.LazyPath{ .path = "raylib/src/zig-out/lib/raylib.lib" });
+        step.addObjectFile(std.Build.LazyPath{ .path = "zig-out/lib/raylib.lib" });
     } else {
-        step.addObjectFile(std.Build.LazyPath{ .path = "raylib/src/zig-out/lib/libraylib.a" });
+        step.addObjectFile(std.Build.LazyPath{ .path = "zig-out/lib/libraylib.a" });
     }
 }
 

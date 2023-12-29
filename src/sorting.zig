@@ -68,7 +68,7 @@ fn merge(
     std.mem.copyForwards(
         T,
         tmpBuf1,
-        data_array.data.items[sindex..sindex + left_len],
+        data_array.data.items[sindex .. sindex + left_len],
     );
     std.mem.copyForwards(
         T,
@@ -133,7 +133,7 @@ pub fn mergeSort(
     data_array: *array.AnimatedArray(T),
     start_index: usize,
     end_index: usize,
-) !void {
+) !bool {
     const len = end_index - start_index;
     var flag: bool = true;
 
@@ -141,9 +141,15 @@ pub fn mergeSort(
         1 => {},
         else => {
             const midpoint = 1 + (len - 1) / 2;
-            try mergeSort(T, data_array, start_index, start_index + midpoint);
+            flag = try mergeSort(T, data_array, start_index, start_index + midpoint);
+            if (!flag) {
+                return false;
+            }
 
-            try mergeSort(T, data_array, start_index + midpoint, end_index);
+            flag = try mergeSort(T, data_array, start_index + midpoint, end_index);
+            if (!flag) {
+                return false;
+            }
 
             flag = try merge(
                 T,
@@ -153,8 +159,10 @@ pub fn mergeSort(
                 end_index,
             );
             if (!flag) {
-                return;
+                return false;
             }
         },
     }
+
+    return true;
 }

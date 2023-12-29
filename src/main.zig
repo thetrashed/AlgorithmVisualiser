@@ -22,12 +22,13 @@ pub fn main() !void {
 
     std.debug.print("{any}\n\n", .{list});
 
-    raylib.SetConfigFlags(raylib.FLAG_WINDOW_RESIZABLE);
+    raylib.SetConfigFlags(raylib.FLAG_WINDOW_RESIZABLE | raylib.FLAG_VSYNC_HINT);
     raylib.InitWindow(800, 600, "Raylib Example");
     defer raylib.CloseWindow();
 
     std.debug.print("{any}\n", .{list});
-    try sorting.mergeSort(c_int, &list, 0, list.data.items.len);
+    _ = try sorting.mergeSort(c_int, &list, 0, list.data.items.len);
+    // sorting.insertionSort(c_int, &list);
     std.debug.print("{any}\n", .{list});
     std.time.sleep(2000000000);
 }

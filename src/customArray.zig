@@ -62,10 +62,14 @@ pub fn AnimatedArray(comptime T: type) type {
 }
 
 fn UpdateScreen(comptime T: type, array: AnimatedArray(T)) bool {
+    if (raylib.WindowShouldClose()) {
+        return false;
+    }
+
     var color: raylib.Color = undefined;
     var height: c_int = raylib.GetScreenHeight();
-    var width: c_int = @divTrunc(
-        raylib.GetScreenWidth() - 100,
+    const width: c_int = @divTrunc(
+        raylib.GetScreenWidth() - 50,
         @as(c_int, @intCast(array.data.items.len)),
     );
 
@@ -104,11 +108,6 @@ fn UpdateScreen(comptime T: type, array: AnimatedArray(T)) bool {
     );
 
     raylib.EndDrawing();
-
-    if (raylib.WindowShouldClose()) {
-        return false;
-    }
-
     std.time.sleep(50000000);
     return true;
 }
