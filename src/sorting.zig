@@ -18,7 +18,6 @@ pub fn bubbleSort(
                 if (!data_array.swapVals(i, j)) {
                     return;
                 }
-                data_array.current_elem = data_array.getValPtr(j);
             }
         }
     }
