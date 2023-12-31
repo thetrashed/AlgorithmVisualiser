@@ -16,7 +16,7 @@ pub fn main() !void {
 
     var list = animatedIntArray.init(allocator);
     defer list.deinit();
-    for (0..300) |_| {
+    for (0..50) |_| {
         try list.data.append(@as(c_int, prng.random().int(u8)));
     }
 
@@ -27,7 +27,8 @@ pub fn main() !void {
     defer raylib.CloseWindow();
 
     std.debug.print("{any}\n", .{list});
-    _ = try sorting.mergeSort(c_int, &list, 0, list.data.items.len);
+    sorting.bubbleSort(c_int, &list);
+    // _ = try sorting.mergeSort(c_int, &list, 0, list.data.items.len);
     // sorting.insertionSort(c_int, &list);
     std.debug.print("{any}\n", .{list});
     std.time.sleep(2000000000);

@@ -6,6 +6,24 @@
 const std = @import("std");
 const array = @import("customArray.zig");
 
+pub fn bubbleSort(
+    comptime T: type,
+    data_array: *array.AnimatedArray(T),
+) void {
+    var i: usize = 0;
+    while (i < data_array.data.items.len) : (i += 1) {
+        data_array.current_elem = data_array.getValPtr(i);
+        for (i+1..data_array.data.items.len) |j| {
+            if (data_array.compareData(data_array.getVal(i), data_array.getVal(j)) == 1) {
+                if (!data_array.swapVals(i, j)) {
+                    return;
+                }
+                data_array.current_elem = data_array.getValPtr(j);
+            }
+        }
+    }
+}
+
 pub fn insertionSort(
     comptime T: type,
     data_array: *array.AnimatedArray(T),
