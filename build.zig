@@ -2,26 +2,26 @@ const std = @import("std");
 const raySdk = @import("raylib/src/build.zig");
 
 // setTarget() must have been called on step before calling this
-fn addRaylibDependencies(step: *std.build.LibExeObjStep, raylib: *std.build.LibExeObjStep) void {
-    step.addIncludePath(std.Build.LazyPath{ .path = "raylib/src/" });
+// fn addRaylibDependencies(step: *std.build.LibExeObjStep, raylib: *std.build.LibExeObjStep) void {
+//     step.addIncludePath(std.Build.LazyPath{ .path = "raylib/src/" });
 
-    // raylib's build.zig file specifies all libraries this executable must be
-    // linked with, so let's copy them from there.
-    for (raylib.link_objects.items) |o| {
-        if (o == .system_lib) {
-            step.linkSystemLibrary(o.system_lib.name);
-        }
-    }
-    if (step.target.isWindows()) {
-        step.addObjectFile(std.Build.LazyPath{ .path = "zig-out/lib/raylib.lib" });
-    } else {
-        step.addObjectFile(std.Build.LazyPath{ .path = "zig-out/lib/libraylib.a" });
-    }
-}
+//     // raylib's build.zig file specifies all libraries this executable must be
+//     // linked with, so let's copy them from there.
+//     for (raylib.link_objects.items) |o| {
+//         if (o == .system_lib) {
+//             step.linkSystemLibrary(o.system_lib.name);
+//         }
+//     }
+//     if (step.target.isWindows()) {
+//         step.addObjectFile(std.Build.LazyPath{ .path = "zig-out/lib/raylib.lib" });
+//     } else {
+//         step.addObjectFile(std.Build.LazyPath{ .path = "zig-out/lib/libraylib.a" });
+//     }
+// }
 
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
-    var rloptions = raySdk.Options{
+    const rloptions = raySdk.Options{
         .raudio = true,
         .rmodels = true,
         .rshapes = true,
@@ -32,7 +32,7 @@ pub fn build(b: *std.Build) !void {
     };
     const optimize = b.standardOptimizeOption(.{});
 
-    var raylib = try raySdk.addRaylib(b, target, optimize, rloptions);
+    const raylib = try raySdk.addRaylib(b, target, optimize, rloptions);
     b.installArtifact(raylib);
 
     const exe = b.addExecutable(.{
@@ -43,9 +43,9 @@ pub fn build(b: *std.Build) !void {
     });
     exe.linkLibC();
 
-    addRaylibDependencies(exe, raylib);
-    // exe.addIncludePath(.{ .path = "raylib/src" });
-    // exe.linkLibrary(raylib);
+    // addRaylibDependencies(exe, raylib);
+    exe.addIncludePath(.{ .path = "raylib/src" });
+    exe.linkLibrary(raylib);
 
     b.installArtifact(exe);
 
@@ -65,7 +65,7 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
-    addRaylibDependencies(unit_tests, raylib);
+    // addRaylibDependencies(unit_tests, raylib);
 
     const run_unit_tests = b.addRunArtifact(unit_tests);
 

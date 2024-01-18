@@ -39,7 +39,7 @@ pub fn AnimatedArray(comptime T: type) type {
         }
 
         pub fn swapVals(this: *This, index1: usize, index2: usize) bool {
-            var tmp: T = this.data.items[index1];
+            const tmp: T = this.data.items[index1];
             this.data.items[index1] = this.data.items[index2];
             this.data.items[index2] = tmp;
             this.current_elem = &this.data.items[index2];
@@ -67,7 +67,7 @@ fn UpdateScreen(comptime T: type, array: AnimatedArray(T)) bool {
     }
 
     var color: raylib.Color = undefined;
-    var height: c_int = raylib.GetScreenHeight();
+    const height: c_int = raylib.GetScreenHeight();
     const width: c_int = @divTrunc(
         raylib.GetScreenWidth() - 50,
         @as(c_int, @intCast(array.data.items.len)),

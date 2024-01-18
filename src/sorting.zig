@@ -37,7 +37,7 @@ pub fn insertionSort(
         ) == 1) continue;
 
         var j = i - 1;
-        var original_i = i;
+        const original_i = i;
         while (true) {
             data_array.current_elem = data_array.getValPtr(i);
             if (data_array.compareData(
