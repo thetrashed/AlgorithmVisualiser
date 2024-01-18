@@ -19,7 +19,7 @@ fn addRaylibDependencies(step: *std.build.LibExeObjStep, raylib: *std.build.LibE
     }
 }
 
-pub fn build(b: *std.Build) void {
+pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     var rloptions = raySdk.Options{
         .raudio = true,
@@ -32,14 +32,7 @@ pub fn build(b: *std.Build) void {
     };
     const optimize = b.standardOptimizeOption(.{});
 
-    var raylib = raySdk.addRaylib(b, target, optimize, rloptions);
-    raylib.installHeader("raylib/src/raylib.h", "raylib.h");
-    raylib.installHeader("raylib/src/raymath.h", "raymath.h");
-    raylib.installHeader("raylib/src/rlgl.h", "rlgl.h");
-
-    if (rloptions.raygui) {
-        raylib.installHeader("raygui/src/raygui.h", "raygui.h");
-    }
+    var raylib = try raySdk.addRaylib(b, target, optimize, rloptions);
     b.installArtifact(raylib);
 
     const exe = b.addExecutable(.{
